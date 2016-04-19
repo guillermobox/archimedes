@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+		<script id="resourcenav" type="text/x-icanhaz">
+			<nav class="noselect ResourceNavigationBar">
+				<div class="blue darken-1 nav-wrapper z-depth-2">
+					<img src="images/archimedes_head.png" title="That's archimedes!" />
+					<div class="ResourceNavigationTitle truncate">{{ readable-title }}</div>
+					<ul class="right">
+						<li> <a title="Go back to main screen" data-action="back"> <i class="material-icons">close</i> </a> </li>
+					</ul>
+				</div>
+			</nav>
+		</script>
+
+		<script id="resourcelist" type="text/x-icanhaz">
+			<ul data-role="list" class="collapsible popout" data-collapsible="accordion" style="margin-bottom:60px;">
+			</ul>
+		</script>
+
+		<script id="resource" type="text/x-icanhaz">
+			<li class="ResourceRow noselect">
+				<div class="row collapsible-header">
+					<div class="col s8 l6 truncate">
+						<i title="{{ status_msg }}" class="material-icons">{{ icon }}</i>
+						{{ readable-title }}
+						<span class="hide-on-med-and-down dimmed">({{readable-disk}})</span>
+					</div>
+					<div class="col s4 l2 truncate dimmed"> {{ Folder}} </div>
+					<div class="col l1 hide-on-med-and-down truncate dimmed smallcaps"> {{ Kind }} </div>
+					<div class="col l1 hide-on-med-and-down truncate"> {{ readable-creation-time }} </div>
+					<div class="col s2 l1 right">
+					<div class="Controls">
+						<span data-role="controls">
+							<i data-action="delete" class="material-icons" title="Delete resource">delete</i>
+							<i data-action="archive" class="material-icons" title="Archive the resource">archive</i>
+							<i data-action="unarchive" class="material-icons" title="Unarchive the resource">unarchive</i>
+							<i data-action="OpenLink" class="material-icons" title="Open online version">public</i>
+							<i data-action="Download" class="material-icons" title="Start downloading the resource">get_app</i>
+							<i data-action="viewImage" class="material-icons" title="See screenshot of the resource">image</i>
+							<i data-action="viewFull" class="material-icons" title="Open resource">input</i>
+						</span>
+						<i data-action="ShowControls" class="material-icons dimmed" title="Show more">more_vert</i></span>
+						<i style="color:{{ readable-favorite-color }}" data-action="MarkFavorite" class="material-icons dimmed" title="Favorite!">{{ favorite-icon }}</i></span>
+					</div>
+					</div>
+				</div>
+
+				<div class="collapsible-body">
+					<div></div>
+				</div>
+			</li>
+		</script>
+
+		<script id="noresource" type="text/x-icanhaz">
+			<div class="card" data-role="empty">
+				<div class="card-content">
+					<span class="card-title">No resources defined</span>
+					<p>There are no resources defined yet. Use the plus button at your top right to save a website, image, or video, to watch offline.</p>
+					<p>You may also just paste a link in this site (Ctrl+V), and
+					the dialog to add a new resource will appear filled.</p>
+				</div>
+			</div>
+		</script>
+
+		<link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+		<link type="text/css" rel="stylesheet" href="css/archimedes.css"  media="screen,projection"/>
+
+		<script type="text/javascript" src="js/jquery-2.2.3.js"></script>
+		<script type="text/javascript" src="js/underscore.js"></script>
+		<script type="text/javascript" src="js/moment.js"></script>
+		<script type="text/javascript" src="js/backbone.js"></script>
+		<script type="text/javascript" src="js/backboneplus.js"></script>
+		<script type="text/javascript" src="js/ICanHaz.js"></script>
+		<script type="text/javascript" src="js/archimedes.js"></script>
+		<script type="text/javascript" src="js/materialize.js"></script>
+		<script type="text/javascript" src="js/mousetrap.js"></script>
+
+		<title>Archimedes</title>
+	</head>
+
+	<body>
+		<nav id="NavigationBar" class="noselect">
+			<div class="green darken-1 nav-wrapper z-depth-2">
+				<img src="images/archimedes_head.png" title="That's archimedes!" />
+				<span>Archimedes</span>
+				<div title="Filter by folder" id="FolderFilterBox">
+					<i class="left material-icons">folder_open</i>
+					<input id="FolderFilterInput" type="text" value="/">
+				</div>
+				<ul class="right">
+					<li> <a title="Show only favorites" class="toolbarbutton" data-action="filterFavorites"> <i class="material-icons">favorite</i> </a> </li>
+					<li> <a title="Show archived elements" class="toolbarbutton" data-action="filterArchived"> <i class="material-icons">archive</i> </a> </li>
+					<li> <a title="Add a new resource" data-action="add"> <i class="material-icons">add</i> </a> </li>
+				</ul>
+			</div>
+		</nav>
+
+
+		<div id="FullScreenOverlay">
+		</div>
+
+		<div id="resource-container" class="container z-depth-0"> </div>
+
+		<div id="newresource" class="modal">
+			<form action="#" id="addForm">
+				<div class="modal-content">
+					<h4>Add resource</h4>
+					<div class="row">
+						<div class="input-field col s12">
+							<i class="material-icons prefix">public</i>
+							<input id="URL" type="text">
+							<label class="active" for="URL">URL of resource</label>
+						</div>
+						<div class="input-field col s12">
+							<i class="material-icons prefix">folder_open</i>
+							<input id="Folder" type="text">
+							<label class="active" for="Folder">Folder</label>
+						</div>
+						<div class="input-field col s12">
+							<input type="checkbox" id="DownloadInmediately" value="on" checked="checked">
+							<label for="DownloadInmediately">Start downloading inmediately</label>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<a data-action="submit" class="waves-effect waves-green btn-flat">Submit</a>
+					<a class="model-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+				</div>
+			</form>
+		</div>
+
+		<div id="ModalPocket" class="modal">
+			<div class="modal-content">
+				<h4>Retrieve resources from <img src="images/pocket_icon.png">&nbsp;<span class="dimmed">Pocket</span></h4>
+				<p>You can retrieve the resources from your Pocket account
+				here. Just login and select the desired resources to load into Archimedes.
+				After the resources are loaded, they will be removed from
+				Pocket.
+				</p>
+				<iframe id="iframepocket" frameborder=0>
+				</iframe>
+			</div>
+			<div class="modal-footer">
+				<a id="getpocket" class="waves-effect waves-green btn-flat">Get them!</a>
+				<a class="model-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+			</div>
+		</div>
+
+	</body>
+</html>
