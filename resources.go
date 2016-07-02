@@ -75,6 +75,8 @@ func resourceCreate(response http.ResponseWriter, request *http.Request) {
 		res.Kind = "image"
 	} else if strings.HasPrefix(mimetype[0], "application/pdf") {
 		res.Kind = "pdf"
+	} else if strings.Contains(res.URL, "www.youtube.com") {
+		res.Kind = "video"
 	} else {
 		res.Kind = "web"
 	}
@@ -125,11 +127,19 @@ func DownloadResource(res Resource) {
 	url, _ := url.Parse(res.URL)
 	res.Downloading = true
 	db.Save(&res)
-	res.LocalURL = fmt.Sprintf("/content/%d/%s%s", res.ID, url.Host, url.Path)
+
+	if res.Kind == "video" {
+		res.LocalURL = fmt.Sprintf("/content/%d/%s.mp4", res.ID, url.RawQuery)
+	} else {
+		res.LocalURL = fmt.Sprintf("/content/%d/%s%s", res.ID, url.Host, url.Path)
+	}
 	com := exec.Command("wget", "--page-requisites", "--span-hosts", "--convert-links", url.Host+url.Path)
 
 	directory := ExpandHome(path.Join(globalconfig.Global.Path, "Resources", fmt.Sprintf("%d", res.ID)))
 	os.MkdirAll(directory, 0777)
+	if res.Kind == "video" {
+		com = exec.Command("youtube-dl", "-f", "bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio", "--merge-output-format", "mp4", "--output", url.RawQuery, url.Host + url.Path + "?" + url.RawQuery)
+	}
 	com.Dir = directory
 	cmderr := com.Run()
 	var disk int = 0
@@ -158,6 +168,10 @@ func DownloadResource(res Resource) {
 		output, _ = com.Output()
 		fmt.Sscan(string(output), &disk)
 		res.DiskUsage += disk
+	} else if res.Kind == "video" {
+		com = exec.Command("youtube-dl", "--get-title", url.Host + url.Path + "?" + url.RawQuery)
+		output, _ := com.Output()
+		res.Title = string(output)
 	}
 	res.DiskUsage = 0
 	com = exec.Command("du", "-b", "-s", directory)

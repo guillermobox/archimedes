@@ -243,6 +243,13 @@ $(document).ready(function() {
         viewer.css('width', '100%');
         viewer.css('height', '600px');
         viewer.attr('data', url);
+      } else if (this.model.get('Kind') == 'video') {
+        viewer = $('<video>');
+        viewer.css('width', '100%');
+        viewer.css('height', '600px');
+        viewer.attr('src', url);
+        viewer.prop('controls', true);
+        viewer.prop('autoplay', true);
       } else {
         viewer = $('<iframe>');
         viewer.css('width', '100%');
@@ -277,6 +284,14 @@ $(document).ready(function() {
         viewer.css('height', '100%');
         viewer.css('margin-top', '-10px');
         viewer.attr('data', url);
+      } else if (this.model.get('Kind') == 'video') {
+        viewer = $('<video>');
+        viewer.css('width', '100%');
+        viewer.css('height', '100%');
+        viewer.css('margin-top', '-10px');
+        viewer.attr('src', url);
+        viewer.prop('controls', true);
+        viewer.prop('autoplay', true);
       } else {
         viewer = $('<iframe>');
         viewer.css('width', '100%');
