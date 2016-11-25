@@ -1,12 +1,54 @@
 var archimedes = archimedes || {};
 
 function getFromPocket() {
-  $('#iframepocket').attr('src',"");
-  $('#ModalPocket').openModal({
-    in_duration: 0,
-    out_duration: 0
+	var content = ich['pocket']();
+	var target = $('#ArchimedesContent')
+	$('#iframepocket', content).attr('src', 'http://localhost:8081/pocket/');
+	target.html(content);
+	$('#closepocket').click(function(ev){
+	$('#ArchimedesContent').html('');
+	});
+
+  $('#getpocket').click(function (ev){
+    var form = $('#Archimedes').contents().find('form');
+
+    form.each(function (i, element) {
+      var $inputs = $(':input', $(element));
+
+      var values = {};
+      $inputs.each(function() {
+        if ( $(this).attr('type') == 'checkbox')
+          values[this.name] = $(this).prop('checked');
+        else
+          values[this.name] = $(this).val();
+      });
+
+      if (values['Retrieve'] == "true") {
+        var resource = new archimedes.Models.Resource({
+          URL: values['URL'],
+          Folder: values['Folder'] || '/pocket',
+          Title: "",
+        });
+        resource.save({}, {
+          wait: true,
+          success: function(model, response, options) {
+            archimedes.res.add(resource);
+            /* now remove it from Pocket */
+            $.ajax("http://localhost:8081/pocket/remove/" + values["ID"]);
+            if (values['Download']) {
+              var action = new archimedes.Models.Action();
+              action.set("Target", resource.id);
+              action.set("Type", "Download");
+              action.save();
+            }
+          }
+        });
+
+      };
+    });
+		$('#ArchimedesContent').html('');
   });
-  $('#iframepocket').attr('src', 'http://localhost:8081/pocket/');
+
 }
 
 function humanFileSize(bytes, si) {
@@ -191,7 +233,7 @@ $(document).ready(function() {
 
       overlay.html(viewer);
 
-      $('#resource-container').hide();
+      $('Archimedes').hide();
       ev.preventDefault();
       $('#NavigationBar').hide();
       archimedes.nav = new archimedes.Views.ResourceNav({
@@ -234,38 +276,32 @@ $(document).ready(function() {
     },
 
     showCollapsible: function(ev) {
-      var target = $('.collapsible-body > div', this.$el);
+      var target = $('#ArchimedesContent')
       var url = this.model.get('LocalURL');
       var viewer
 
       if (this.model.get('Kind') == 'pdf') {
         viewer = $('<object>');
         viewer.css('width', '100%');
-        viewer.css('height', '600px');
+        viewer.css('height', '100%');
         viewer.attr('data', url);
       } else if (this.model.get('Kind') == 'video') {
         viewer = $('<video>');
         viewer.css('width', '100%');
-        viewer.css('height', '600px');
+        viewer.css('height', '100%');
         viewer.attr('src', url);
         viewer.prop('controls', true);
         viewer.prop('autoplay', true);
       } else {
         viewer = $('<iframe>');
         viewer.css('width', '100%');
-        viewer.css('height', '600px');
+        viewer.css('height', '100%');
         viewer.attr('src', url);
         viewer.attr('frameborder', '0');
         viewer.attr('sandbox', 'allow-scripts allow-popups allow-same-origin allow-forms');
       }
-      viewer.css('display', 'none');
 
-      target.html("");
-
-      setTimeout(function() {
-        target.html(viewer);
-        viewer.fadeIn("slow");
-      }, 250);
+      target.html(viewer);
     },
 
     showFull: function(ev) {
@@ -305,7 +341,7 @@ $(document).ready(function() {
       overlay.html(viewer);
       overlay.show();
 
-      $('#resource-container').hide();
+      $('#Archimedes').hide();
       $('#NavigationBar').hide();
       archimedes.nav = new archimedes.Views.ResourceNav({
         model: this.model
@@ -342,7 +378,7 @@ $(document).ready(function() {
       var overlay = $('#FullScreenOverlay');
       overlay.hide();
       this.$el.hide();
-      $('#resource-container').show();
+      $('#Archimedes').show();
       $("#NavigationBar").show();
       delete this;
     },
@@ -362,8 +398,8 @@ $(document).ready(function() {
     collection: archimedes.res,
   });
   archimedes.v.render();
-  $('#resource-container').append(archimedes.v.$el);
-  $('.collapsible').collapsible({});
+
+  $('#Archimedes').append(archimedes.v.$el);
 
   $('[data-action=add]').click(function(ev) {
     $('#newresource input').val('');
@@ -452,45 +488,6 @@ $(document).ready(function() {
 
   archimedes.resfresh = window.setInterval(refreshData, 1000 * 5);
 
-  $('#getpocket').click(function (ev){
-    var form = $('#iframepocket').contents().find('form');
-
-    form.each(function (i, element) {
-      var $inputs = $(':input', $(element));
-
-      var values = {};
-      $inputs.each(function() {
-        if ( $(this).attr('type') == 'checkbox')
-          values[this.name] = $(this).prop('checked');
-        else
-          values[this.name] = $(this).val();
-      });
-
-      if (values['Retrieve'] == "true") {
-        var resource = new archimedes.Models.Resource({
-          URL: values['URL'],
-          Folder: values['Folder'] || '/pocket',
-          Title: "",
-        });
-        resource.save({}, {
-          wait: true,
-          success: function(model, response, options) {
-            archimedes.res.add(resource);
-            /* now remove it from Pocket */
-            $.ajax("http://localhost:8081/pocket/remove/" + values["ID"]);
-            if (values['Download']) {
-              var action = new archimedes.Models.Action();
-              action.set("Target", resource.id);
-              action.set("Type", "Download");
-              action.save();
-            }
-          }
-        });
-
-      };
-    });
-    $('#ModalPocket').closeModal();
-  });
 
   Mousetrap.bind('ctrl+v', function(e) {
     $('[data-action=add]').click();
@@ -507,6 +504,28 @@ $(document).ready(function() {
 
   Mousetrap.bind('p', function() {
     getFromPocket();
+  });
+
+  Mousetrap.bind('z', function() {
+    var root = $('iframe')[0].contentDocument;
+    var html = root.getElementsByTagName("html")[0];
+    var zoom = html.style['zoom'];
+    if (zoom == "") {
+      zoom = 1.0;
+    }
+    zoom = zoom * 1 + 0.2;
+    html.style['zoom'] = zoom;
+  });
+
+  Mousetrap.bind('Z', function() {
+    var root = $('iframe')[0].contentDocument;
+    var html = root.getElementsByTagName("html")[0];
+    var zoom = html.style['zoom'];
+    if (zoom == "") {
+      zoom = 1.0;
+    }
+    zoom = zoom * 1 - 0.2;
+    html.style['zoom'] = zoom;
   });
 
   Mousetrap.bind('a', function() {
