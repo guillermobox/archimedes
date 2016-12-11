@@ -1,125 +1,123 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-		<script id="resourcenav" type="text/x-icanhaz">
-			<nav class="noselect ResourceNavigationBar">
-				<div class="blue darken-1 nav-wrapper z-depth-2">
-					<img src="images/archimedes_head.png" title="That's archimedes!" />
-					<div class="ResourceNavigationTitle truncate">{{ readable-title }}</div>
-					<ul class="right">
-						<li> <a title="Go back to main screen" data-action="back"> <i class="material-icons">close</i> </a> </li>
-					</ul>
-				</div>
-			</nav>
-		</script>
+<link type="text/css" rel="stylesheet" href="css/normalize.css"    media="screen,projection"/>
+<link type="text/css" rel="stylesheet" href="css/font-awesome.css" media="screen,projection"/>
+<link type="text/css" rel="stylesheet" href="css/archimedes.css"   media="screen,projection"/>
 
-		<script id="resourcelist" type="text/x-icanhaz">
-			<ul data-role="list" style="margin:0;">
-			</ul>
-		</script>
+<script type="text/javascript" src="js/jquery-2.2.3.js"></script>
+<script type="text/javascript" src="js/underscore.js"></script>
+<script type="text/javascript" src="js/moment.js"></script>
+<script type="text/javascript" src="js/backbone.js"></script>
+<script type="text/javascript" src="js/backboneplus.js"></script>
+<script type="text/javascript" src="js/ICanHaz.js"></script>
+<script type="text/javascript" src="js/archimedes.js"></script>
+<script type="text/javascript" src="js/mousetrap.js"></script>
 
-		<script id="resource" type="text/x-icanhaz">
-			<li class="ResourceRow noselect">
-				<div class="row collapsible-header">
-					<div class="col s10 truncate">
-						<i title="{{ status_msg }}" class="material-icons">{{ icon }}</i>
-						{{ readable-title }}
-					</div>
-					<div class="col s2 l1 right">
-					<div class="Controls">
-						<span data-role="controls">
-							<i data-action="delete" class="material-icons" title="Delete resource">delete</i>
-							<i data-action="archive" class="material-icons" title="Archive the resource">archive</i>
-							<i data-action="unarchive" class="material-icons" title="Unarchive the resource">unarchive</i>
-							<i data-action="OpenLink" class="material-icons" title="Open online version">public</i>
-							<i data-action="Download" class="material-icons" title="Start downloading the resource">get_app</i>
-							<i data-action="viewImage" class="material-icons" title="See screenshot of the resource">image</i>
-							<i data-action="viewFull" class="material-icons" title="Open resource">input</i>
-						</span>
-						<i data-action="ShowControls" class="material-icons dimmed" title="Show more">more_vert</i></span>
-						<i style="color:{{ readable-favorite-color }}" data-action="MarkFavorite" class="material-icons dimmed" title="Favorite!">{{ favorite-icon }}</i></span>
-					</div>
-					</div>
-				</div>
+<script id="NewResource" type="text/x-icanhaz">
+<div id="newresource">
+<form action="#" id="addForm">
+	<h1>Add resource</h1>
+	<div class="Fields">
+		<div>
+			<label> <i class="fa fa-globe"></i> URL of resource</label>
+			<input id="URL" type="text">
+		</div>
+		<div class="input-field col s12">
+			<label> <i class="fa fa-folder"></i> Folder</label>
+			<input id="Folder" type="text">
+		</div>
+		<div class="input-field col s12">
+			<label for="DownloadInmediately">Start downloading inmediately</label>
+			<input type="checkbox" id="DownloadInmediately" value="on" checked="checked">
+		</div>
+	</div>
+	<div class="Buttons">
+		<a class="button" data-action="submit">Submit</a>
+		<a class="button">Cancel</a>
+	</div>
+</form>
+</div>
+</script>
 
-				<div class="collapsible-body">
-					<div></div>
-				</div>
-			</li>
-		</script>
+<script id="resourcelist" type="text/x-icanhaz">
+	<div style="height:100%;">
+		<div style="overflow-y: scroll;height:100%;">
+		<ul data-role="list" id="ResourceList">
+		</ul>
+		</div>
+	</div>
+</script>
+
+<script id="resource" type="text/x-icanhaz">
+<li class="ResourceRow noselect">
+    <i
+	style="color:#555;font-size:24px;margin:0px 16px;position:absolute;top:50%;margin-top:-12px;width:24px;height:24px;"
+ class="fa {{content-icon}}"></i>
+	<div style="margin-left:52px;width:calc(100% - 140px);text-overflow:ellipsis;overflow:hidden;">
+		<span style="color:black;white-space:nowrap;">{{readable-title}}</span><br/>
+		<span style="color:#777;">{{Folder}} ({{readable-disk}})</span>
+	</div>
+	<div class="Controls">
+		<i class="fa fa-plus-square-o" data-action="toggleControls" title="Show more controls"></i></span>
+		<i class="fa {{favorite-icon}}" style="color:{{ readable-favorite-color }}" data-action="MarkFavorite" title="Mark as favorite"></i></span>
+		<span data-role="controls">
+			<i data-action="delete" class="fa fa-trash" title="Delete resource"></i><i data-action="archive" class="fa fa-floppy-o" title="Archive the resource"></i><i data-action="OpenLink" class="fa fa-globe" title="Open online version"></i><i data-action="Download" class="fa fa-download" title="Start downloading the resource"></i><i data-action="viewImage" class="fa fa-photo" title="See screenshot of the resource"></i><i data-action="viewFull" class="fa fa-external-link" title="Open resource in a new tab"></i><i data-action="edit" class="fa fa-edit" title="Edit the resource"></i>
+		</span>
+	</div>
+</li>
+</script>
 
 		<script id="noresource" type="text/x-icanhaz">
-			<div class="card" data-role="empty">
-				<div class="card-content">
-					<span class="card-title">No resources defined</span>
-					<p>There are no resources defined yet. Use the plus button at your top right to save a website, image, or video, to watch offline.</p>
-					<p>You may also just paste a link in this site (Ctrl+V), and
-					the dialog to add a new resource will appear filled.</p>
-				</div>
-			</div>
-		</script>
-
-		<script id="pocket" type="text/x-icanhaz">
-		<div style="padding:20px;">
-				<h4>Retrieve resources from <img style="height:48px;" src="images/pocket_icon.png">&nbsp;<span class="dimmed">Pocket</span></h4>
-				<p>You can retrieve the resources from your Pocket account
-				here. Just login and select the desired resources to load into Archimedes.
-				After the resources are loaded, they will be removed from
-				Pocket.
-				</p>
-				<iframe id="iframepocket" frameborder=0>
-				</iframe>
-			<div style="position:absolute;bottom:20px;right:20px;">
-				<a id="getpocket" class="waves-effect waves-green btn-flat">Get them!</a>
-				<a id="closepocket" class="model-action modal-close waves-effect waves-green btn-flat">Cancel</a>
-			</div>
+		<div>
+			<p>There are no resources defined yet. Use the plus button at your top right to save a website, image, or video, to watch offline.</p>
+			<p>You may also just paste a link in this site (Ctrl+V), and
+			the dialog to add a new resource will appear filled.</p>
 		</div>
 		</script>
 
-		<link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
-		<link type="text/css" rel="stylesheet" href="css/archimedes.css"  media="screen,projection"/>
+<title>Archimedes</title>
+</head>
 
-		<script type="text/javascript" src="js/jquery-2.2.3.js"></script>
-		<script type="text/javascript" src="js/underscore.js"></script>
-		<script type="text/javascript" src="js/moment.js"></script>
-		<script type="text/javascript" src="js/backbone.js"></script>
-		<script type="text/javascript" src="js/backboneplus.js"></script>
-		<script type="text/javascript" src="js/ICanHaz.js"></script>
-		<script type="text/javascript" src="js/archimedes.js"></script>
-		<script type="text/javascript" src="js/materialize.js"></script>
-		<script type="text/javascript" src="js/mousetrap.js"></script>
+<body>
 
-		<title>Archimedes</title>
-	</head>
+<nav id="NavigationBar" class="noselect">
+	<div>
+		<img id="ArchimedesHead" src="images/archimedes_head.png" title="That's archimedes!" />
+		<input id="FolderFilterInput" type="text" placeholder="Ask archimedes!"></input>
 
-	<body>
-		<nav id="NavigationBar" class="noselect"
-			style="box-shadow:none;position:fixed;top:0px;">
-			<div class="green darken-1 nav-wrapper" style="box-shadow:none;">
-				<img src="images/archimedes_head.png" title="That's archimedes!" />
-				<span>Archimedes</span>
-				<div title="Filter by folder" id="FolderFilterBox">
-					<i class="left material-icons">folder_open</i>
-					<input id="FolderFilterInput" type="text" value="/">
-				</div>
-				<ul class="right">
-					<li> <a title="Show only favorites" class="toolbarbutton" data-action="filterFavorites"> <i class="material-icons">favorite</i> </a> </li>
-					<li> <a title="Show archived elements" class="toolbarbutton" data-action="filterArchived"> <i class="material-icons">archive</i> </a> </li>
-					<li> <a title="Add a new resource" data-action="add"> <i class="material-icons">add</i> </a> </li>
-				</ul>
-			</div>
-		</nav>
-
-
-		<div id="FullScreenOverlay">
+		<ul class="toolbar">
+			<li> <a title="Show only favorites"
+					class="toolbarbutton"
+					data-action="filterFavorites">
+						<i class="fa fa-heart"></i> </a> </li>
+			<li> <a title="Show archived elements" class="toolbarbutton"
+					data-action="filterArchived"> <i class="fa
+						fa-floppy-o"></i> </a> </li>
+			<li> <a title="Add a new resource" data-action="add"> <i
+								class="fa fa-plus"></i> </a> </li>
+		</ul>
+		<!--
+		<div title="Filter by folder" id="FolderFilterBox">
+			<i class="left fa fa-open"></i>
+			<input id="FolderFilterInput" type="text" value="/">
 		</div>
+		-->
+	</div>
+</nav>
 
-		<div id="Archimedes" > </div>
-		<div id="ArchimedesContent"> </div>
+<div id="Archimedes" > </div>
+<div id="ArchimedesContent"> </div>
 
+</body>
+</html>
+
+
+
+		<!--
 		<div id="newresource" class="modal">
 			<form action="#" id="addForm">
 				<div class="modal-content">
@@ -147,7 +145,24 @@
 				</div>
 			</form>
 		</div>
+		-->
 
-
-	</body>
-</html>
+		<!--
+		<script id="pocket" type="text/x-icanhaz">
+		<div style="padding:20px;">
+				<h4>Retrieve resources from <img
+				style="height:48px;line-height:48px;margin-bottom:-10px;" src="images/pocket_icon.png">&nbsp;<span class="dimmed">Pocket</span></h4>
+				<p>You can retrieve the resources from your Pocket account
+				here. Just login and select the desired resources to load into Archimedes.
+				After the resources are loaded, they will be removed from
+				Pocket.
+				</p>
+				<iframe id="iframepocket" frameborder=0>
+				</iframe>
+			<div style="position:absolute;bottom:20px;right:20px;">
+				<a id="getpocket" class="waves-effect waves-green btn-flat">Get them!</a>
+				<a id="closepocket" class="model-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+			</div>
+		</div>
+		</script>
+		-->
