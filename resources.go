@@ -23,7 +23,7 @@ type Resource struct {
 	Kind         string
 	Folder       string
 	Downloaded   bool
-//	Downloading  bool
+	Downloading  bool
 	Favorited    bool
 	Archived     bool
 	ErrorMsg     string
