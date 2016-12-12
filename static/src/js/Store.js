@@ -3,11 +3,14 @@ import dispatcher from "./Dispatcher"
 class Store {
   constructor () {
     this.listeners = {}
-    setTimeout(()=>
-    this.emit("sync", [
-      {ID:1,Title:"Lodash website", LocalURL:"test/lodash.com/index.html"},
-      {ID:2,Title:"Rail Freight transport - Wikipedia", LocalURL:"test/en.wikipedia.org/wiki/Rail_freight_transport"},
-    ]), 1000);
+    fetch('/resources/')
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        console.log(data);
+        this.emit("sync", data);
+      }.bind(this))
   }
   emit (event, data) {
     if (event in this.listeners) {
