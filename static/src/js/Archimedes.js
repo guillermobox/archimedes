@@ -1,4 +1,5 @@
-import Archimedes from './Components/Archimedes.js'
+
+import Archimedes from './Components/Archimedes'
 import React from "react";
 import ReactDOM from "react-dom";
 

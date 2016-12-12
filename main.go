@@ -39,7 +39,7 @@ func main() {
 	gcfg.ReadFileInto(&globalconfig, globalpath)
 	gcfg.ReadFileInto(&globalconfig, localpath)
 
-	http.Handle("/", http.FileServer(http.Dir("static/")))
+	http.Handle("/", http.FileServer(http.Dir("static/dist/")))
 	http.Handle("/content/", http.StripPrefix("/content", http.FileServer(http.Dir(ExpandHome(path.Join(globalconfig.Global.Path, "Resources"))))))
 	http.Handle("/screenshot/", http.StripPrefix("/screenshot", http.FileServer(http.Dir(ExpandHome(path.Join(globalconfig.Global.Path, "Screenshots"))))))
 
