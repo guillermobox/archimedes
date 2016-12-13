@@ -2,6 +2,7 @@ import React from "react";
 
 export default class Panels extends React.Component {
   startDragging (event) {
+    document.getElementById('overlaypanel').style.display = 'block';
     document.onmouseup = this.stopDragging.bind(this);
     document.onmousemove = this.doDrag.bind(this);
   }
@@ -12,6 +13,7 @@ export default class Panels extends React.Component {
     document.getElementById('secondpanel').style.width = 'calc(' + (100 - newRatio) + "% - 4px)";
   }
   stopDragging (event) {
+    document.getElementById('overlaypanel').style.display = 'none';
     document.onmouseup = undefined;
     document.onmousemove = undefined;
   }
@@ -21,6 +23,7 @@ export default class Panels extends React.Component {
       <div className="Panel-First" id="firstpanel"> {this.props.first} </div>
       <div className="Panel-Divisor" onMouseDown={this.startDragging.bind(this)}></div>
       <div className="Panel-Second" id="secondpanel"> {this.props.second} </div>
+      <div className="Panel-Overlay" id="overlaypanel"> </div>
       </div>
     )
   }
