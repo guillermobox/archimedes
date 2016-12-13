@@ -9,7 +9,7 @@ export default class Archimedes extends React.Component {
     return (
       <div>
       <Navigation />
-      <Panels first={<ResourceList />} second={<ResourceContents />} />
+      <Panels showDrag={true} first={<ResourceList />} second={<ResourceContents />} />
       </div>
     );
   }
