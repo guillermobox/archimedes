@@ -8,8 +8,8 @@ class Store {
         return response.json();
       })
       .then(function (data) {
-        console.log(data);
-        this.emit("sync", data);
+        this.data = data;
+        this.emit("sync", this.data);
       }.bind(this))
   }
   emit (event, data) {
@@ -27,6 +27,13 @@ class Store {
   eventHandler (event) {
     if (event.event == "SHOW_RESOURCE_CONTENTS") {
       this.emit("show", event.data)
+    } else if (event.event == "TOGGLE_FAVORITE") {
+      const pos = this.data.findIndex(obj => obj.ID == event.data.ID)
+      if (pos != -1) {
+        this.data[pos] = event.data;
+        this.data[pos]['Favorited'] = ! this.data[pos]['Favorited'];
+        this.emit("sync", this.data);
+      }
     }
   }
 }

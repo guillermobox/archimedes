@@ -1,17 +1,17 @@
 import React from "react"
-import Navigation from "./Navigation.js"
-import ResourceList from "./ResourceList.js"
-import ResourceContents from "./ResourceContents.js"
+import Navigation from "./Navigation"
+import ResourceList from "./ResourceList"
+import ResourceContents from "./ResourceContents"
+import Panels from "./Panels"
 
 export default class Archimedes extends React.Component {
-	render() {
-		return (
-			<div>
-				<Navigation />
-				<ResourceList />
-				<ResourceContents />
-			</div>
-		);
-	}
+  render() {
+    return (
+      <div>
+      <Navigation />
+      <Panels first={<ResourceList />} second={<ResourceContents />} />
+      </div>
+    );
+  }
 }
 

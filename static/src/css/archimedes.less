@@ -70,15 +70,31 @@ nav {
 	height: 100%;
 }
 
-#ResourceList,#ResourceContents {
-	display:inline-block;
-	box-sizing: border-box;
-	float: left;
-	width: 50%;
+.Panels {
 	height: ~"calc(100% - 64px)";
 	top: 64px;
 	bottom: 0px;
+	.Panel-First,.Panel-Second {
+		box-sizing: border-box;
+		float: left;
+		width: ~"calc(50% - 4px)";
+		height: 100%;
+		display:inline-block;
+	}
+	.Panel-Divisor {
+		background-color: gainsboro;
+		width: 8px;
+		float: left;
+		height: 100%;
+		cursor: col-resize;
+	}
+}
+
+#ResourceList,#ResourceContents {
 	padding: 20px;
+	height: 100%;
+	width: 100%;
+	box-sizing: border-box;
 	will-change: transform;
 }
 
@@ -123,4 +139,9 @@ li {
 	span {
 		padding-left: 10px;
 	}
+}
+
+video {
+	width: 100%;
+	height: 100%;
 }

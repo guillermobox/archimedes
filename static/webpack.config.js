@@ -21,17 +21,17 @@ module.exports = {
     ]
   },
   output: {
-    path: __dirname + "/dist/js",
-    filename: "Archimedes.min.js"
+    path: __dirname + "/dist/",
+    filename: "js/Archimedes.min.js"
   },
   plugins: [
-    new WebpackShellPlugin({onBuildStart:['lessc src/css/archimedes.less src/css/archimedes.css']}),
+    new WebpackShellPlugin({onBuildStart:['lessc src/css/archimedes.less dist/css/archimedes.css']}),
     new CopyWebpackPlugin([
-      {from: "src/index.html", to: __dirname + "/dist/index.html"},
-      {from: "src/archimedes_head.ico", to: __dirname + "/dist/archimeeds_head.ico"},
-      {from: "src/fonts/", to: __dirname + "/dist/fonts/"},
-      {from: "src/images/", to: __dirname + "/dist/images/"},
-      {from: "src/css/", to: __dirname + "/dist/css/"},
+      {from: "src/index.html", to: "index.html"},
+      {from: "src/archimedes_head.ico", to: "archimeeds_head.ico"},
+      {from: "src/fonts/", to: "fonts/"},
+      {from: "src/images/", to: "images/"},
+      {from: "src/css/", to: "css/"},
     ]),
   ]
 }

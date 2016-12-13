@@ -16,7 +16,6 @@ export default class ResourceList extends React.Component {
     resourceStore.off("sync", this.sync)
   }
   sync (resources) {
-    console.log("Syncing with data:", resources);
     this.setState({data:resources});
   }
   render () {

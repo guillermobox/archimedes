@@ -3,8 +3,7 @@
   "version": "0.1.0",
   "description": "Archimedes frontend",
   "scripts": {
-    "build": "webpack",
-    "less": "lessc css/archimedes.less css/archimedes.css"
+    "build": "webpack"
   },
   "author": "Guillermo Indalecio <guillermobox@gmail.com>",
   "license": "MIT",
