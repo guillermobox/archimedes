@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "description": "Archimedes frontend",
   "scripts": {
-    "build": "webpack"
+    "build": "webpack",
+    "clean": "rm -rf node_modules dist"
   },
   "author": "Guillermo Indalecio <guillermobox@gmail.com>",
   "license": "MIT",
