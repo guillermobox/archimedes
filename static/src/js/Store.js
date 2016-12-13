@@ -1,9 +1,9 @@
 import dispatcher from "./Dispatcher"
 
 class Store {
-  constructor () {
+  constructor (url) {
     this.listeners = {}
-    fetch('/resources/')
+    fetch(url)
       .then(function (response) {
         return response.json();
       })
@@ -38,7 +38,7 @@ class Store {
   }
 }
 
-const resourceStore = new Store();
+const resourceStore = new Store('/resources/');
 dispatcher.subscribe(resourceStore.eventHandler.bind(resourceStore))
 export default resourceStore;
 
