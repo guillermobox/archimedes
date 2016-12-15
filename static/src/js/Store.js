@@ -22,7 +22,12 @@ class Store {
     this.listeners[event].push(action);
   }
   off (event, action) {
-    this.listeners.pop(this.listeners.indexOf(action));
+    if (event in this.listeners) {
+      const i = this.listeners[event].indexOf(action);
+      if (i >= 0) {
+        this.listeners[event].pop(i);
+      }
+    }
   }
   eventHandler (event) {
     if (event.event == "SHOW_RESOURCE_CONTENTS") {
