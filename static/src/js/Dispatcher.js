@@ -7,9 +7,7 @@ class Dispatcher {
     this.subscriptions.push(func)
   }
   publish (payload) {
-    this.subscriptions.map(function (func) {
-      func(payload);
-    });
+    this.subscriptions.map(func => func(payload));
   }
 }
 
