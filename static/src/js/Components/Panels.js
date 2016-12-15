@@ -15,9 +15,8 @@ export default class Panels extends React.Component {
   }
   resize (x, y) {
       const body = document.getElementsByTagName("body")[0];
-      const newRatio = 100 * (x) / (body.clientWidth);
-      this.refs.first.style.width = 'calc(' + newRatio + "% - 4px)";
-      this.refs.second.style.width = 'calc(' + (100 - newRatio) + "% - 4px)";
+      this.refs.first.style.width = (x - 4) + 'px';
+      this.refs.second.style.width = (body.clientWidth -x - 4) + 'px';
   }
   stopDragging (event) {
     this.resize(event.clientX, event.clientY);
