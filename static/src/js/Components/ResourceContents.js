@@ -20,6 +20,8 @@ export default class ResourceContents extends React.Component {
         return (<video controls autoPlay src={this.state.LocalURL}></video>);
       case "web":
         return (<iframe frameBorder="0" src={this.state.LocalURL} sandbox="allow-scripts allow-popups allow-same-origin allow-forms"> </iframe>);
+      case "pdf":
+        return (<object data={this.state.LocalURL}></object>);
     }
   }
   render () {

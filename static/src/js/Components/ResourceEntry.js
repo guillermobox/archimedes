@@ -24,11 +24,12 @@ export default class ResourceEntry extends React.Component {
     this.setState(this.props.data)
   }
   render () {
-    const favicon = this.state.Favorited ? "fa fa-heart" : "fa fa-heart-o";
     const title = this.state.Title || this.state.URL;
+    const icons = {video: "fa-file-video-o", web: "fa-file-text-o", pdf: "fa-file-pdf-o"};
+    const icon = icons[this.state.Kind];
     return (
-      <li className="noselect" onClick={this.showResource}>
-        <i className={favicon} onClick={this.toggleFav}></i>
+      <li className="noselect resource" onClick={this.showResource}>
+        <i className={"fa " + icon} onClick={this.toggleFav}></i>
         <span>{title}</span>
       </li>
     );
