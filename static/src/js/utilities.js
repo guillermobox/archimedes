@@ -1,4 +1,5 @@
-function humanFileSize(bytes) {
+
+export function humanFileSize(bytes) {
   var thresh = 1024;
   var units = ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
   var u = -1;
