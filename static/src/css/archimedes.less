@@ -174,3 +174,65 @@ object {
   width: 100%;
   height: 100%;
 }
+
+.Portal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.2);
+	padding: 10%;
+	.PortalContents {
+		background-color: white;
+		width: 400px;
+		margin: 0 auto;
+    position: relative;
+		h1 {
+			margin: 0px;
+			background-color: #2e7d32;
+			color: white;
+			font-weight: 200;
+			line-height: 66px;
+			font-size: 17px;
+			text-align: center;
+			text-transform: uppercase;
+		}
+    form {
+      margin: 20px;
+      input {
+        margin: 5px 0px;
+        box-sizing: border-box;
+        width: 100%;
+        line-height: 32px;
+        color: #555;
+        padding: 0px 10px;
+        outline-color: #2e7d32;
+      }
+    }
+    .ModalButtons {
+      text-align: right;
+      button {
+        padding: 10px;
+        text-transform: uppercase;
+        line-height: 18px;
+        font-size: 12px;
+        margin: 10px;
+        background-color: white;
+        border: 0;
+        transition: background-color .2s ease;
+      }
+      button.default {
+        background-color: #2e7d32;
+        color: white;
+      }
+      button:hover {
+        background-color: #f5f5f5;
+      }
+      button.default:hover {
+        background-color: lighten(#2e7d32, 20%);
+      }
+    }
+	}
+}
+
