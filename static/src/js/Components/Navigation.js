@@ -8,12 +8,18 @@ class NewResource extends React.Component {
       <div className="Portal">
       <div className="PortalContents">
       <h1>Add a new resource to archimedes</h1>
-      <form>
-      <input type="text" placeholder="Resource URL"></input>
-      <input type="text" placeholder="Resource Folder"></input>
+      <form className="noselect">
+      <label htmlFor="url">Resource URL</label>
+      <input type="text" id="url"></input>
+      <label htmlFor="folder">Folder</label>
+      <input type="text" id="folder"></input>
+      <input checked type="checkbox" id="download"></input>
+      <label className="checkbox" htmlFor="download">
+      Download inmediately
+      </label>
       </form>
       <div className="ModalButtons">
-        <button>Close</button>
+        <button onClick={this.props.closePortal}>Close</button>
         <button className="default">Submit</button>
       </div>
       </div>
@@ -34,7 +40,7 @@ export default class Navigation extends React.Component {
     resourceStore.on("show", this.updateTitle.bind(this))
   }
   render () {
-    const boton = <button>New</button>;
+    const boton = <button className="fa fa-plus"></button>;
     return (
       <nav>
       <img src="images/archimedes_head.png"></img>
