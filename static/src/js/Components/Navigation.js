@@ -13,7 +13,7 @@ class NewResource extends React.Component {
       <input type="text" id="url"></input>
       <label htmlFor="folder">Folder</label>
       <input type="text" id="folder"></input>
-      <input checked type="checkbox" id="download"></input>
+      <input defaultChecked="checked" type="checkbox" id="download"></input>
       <label className="checkbox" htmlFor="download">
       Download inmediately
       </label>

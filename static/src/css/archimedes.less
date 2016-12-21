@@ -24,6 +24,15 @@ body, html {
   overflow: hidden;
 }
 
+::selection {
+	  background: #2e7d32; /* WebKit/Blink Browsers */
+	  color: white;
+  }
+  ::-moz-selection {
+	    background: #2e7d32; /* Gecko Browsers */
+	  color: white;
+    }
+
 
 .noselect {
   -webkit-touch-callout: none; /* iOS Safari */
@@ -229,7 +238,10 @@ object {
         }
       }
       input[type=checkbox] {
-        display: none;
+	 position: absolute;
+	     width: 1px; height: 1px;
+	         margin: 0; margin-top: 4px; outline: none;
+		     border: 1px solid transparent; background-color: transparent;
       }
       label {
         cursor: pointer;
@@ -252,11 +264,16 @@ object {
         background-color: white;
         border-radius: 1px;
         border: 1px solid #555;
+
+	transition: background-color .2s ease;
+	transition: color .2s ease;
       }
       input[type=checkbox]:checked + label:before {
         content: "yes";
         border-color: #2e7d32;
         color: #2e7d32;
+	background-color: #2e7d32;
+	color: white;
       }
     }
     .ModalButtons {
