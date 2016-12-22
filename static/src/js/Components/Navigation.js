@@ -10,7 +10,7 @@ class NewResource extends React.Component {
       <h1>Add a new resource to archimedes</h1>
       <form className="noselect">
       <label htmlFor="url">Resource URL</label>
-      <input type="text" id="url"></input>
+      <input autoFocus type="text" id="url"></input>
       <label htmlFor="folder">Folder</label>
       <input type="text" id="folder"></input>
       <input defaultChecked="checked" type="checkbox" id="download"></input>
