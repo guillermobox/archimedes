@@ -2,13 +2,20 @@ import React from "react"
 import resourceStore from "../Store.js"
 import Portal from "react-portal";
 
+import * as Actions from '../Actions';
+
 class NewResource extends React.Component {
+  submitResource () {
+    Actions.createResource({URL:this.refs.form.elements.url.value, Folder:this.refs.form.elements.folder.value})
+    this.props.closePortal()
+  }
+
   render () {
     return (
       <div className="Portal">
       <div className="PortalContents">
       <h1>Add a new resource to archimedes</h1>
-      <form className="noselect">
+      <form ref="form" className="noselect">
       <label htmlFor="url">Resource URL</label>
       <input autoFocus type="text" id="url"></input>
       <label htmlFor="folder">Folder</label>
@@ -20,7 +27,7 @@ class NewResource extends React.Component {
       </form>
       <div className="ModalButtons">
         <button onClick={this.props.closePortal}>Close</button>
-        <button className="default">Submit</button>
+        <button onClick={this.submitResource.bind(this)} className="default">Submit</button>
       </div>
       </div>
       </div>

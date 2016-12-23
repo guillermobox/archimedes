@@ -19,8 +19,8 @@ export default class ResourceList extends React.Component {
     this.setState({data:resources});
   }
   render () {
-    const data = this.state['data'].reverse();
-    const resources = data.map((info,i) => <ResourceEntry data={info} key={i} />);
+    const data = this.state['data'];
+    const resources = data.map((info,i) => <ResourceEntry data={info} key={info.ID} />);
     return (
       <div id="ResourceList">
       <ListControls />

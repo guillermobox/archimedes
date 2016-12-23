@@ -70,6 +70,7 @@ func resourceCreate(response http.ResponseWriter, request *http.Request) {
 	var res Resource
 	dec := json.NewDecoder(request.Body)
 	dec.Decode(&res)
+
 	mimetype := []string{mime.TypeByExtension(path.Ext(res.URL))}
 	if strings.HasPrefix(mimetype[0], "image/") {
 		res.Kind = "image"
@@ -93,7 +94,7 @@ func resourceQuery(response http.ResponseWriter, request *http.Request) {
 	defer db.Close()
 
 	var resources []Resource
-	db.Find(&resources)
+	db.Order("ID desc").Find(&resources)
 	e := json.NewEncoder(response)
 	e.Encode(resources)
 	return

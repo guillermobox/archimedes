@@ -3,14 +3,8 @@ import dispatcher from "./Dispatcher"
 class Store {
   constructor (url) {
     this.listeners = {}
-    fetch(url)
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (data) {
-        this.data = data;
-        this.emit("sync", this.data);
-      }.bind(this))
+    this.url = url
+    this.eventHandler = this.eventHandler.bind()
   }
   emit (event, data) {
     if (event in this.listeners) {
@@ -29,21 +23,35 @@ class Store {
       }
     }
   }
+  readCollection () {
+    fetch(this.url)
+    .then(response => response.json())
+    .then(data => {
+      this.data = data;
+      this.emit("sync", this.data);
+    })
+  }
+  createObject (data) {
+    const options = {method: 'post', body: JSON.stringify(data)};
+    fetch(this.url, options)
+    .then(response => response.json())
+    .then(data => {
+      this.data.unshift(data);
+      this.emit("sync", this.data);
+    })
+  }
   eventHandler (event) {
     if (event.event == "SHOW_RESOURCE_CONTENTS") {
       this.emit("show", event.data)
-    } else if (event.event == "TOGGLE_FAVORITE") {
-      const pos = this.data.findIndex(obj => obj.ID == event.data.ID)
-      if (pos != -1) {
-        this.data[pos] = event.data;
-        this.data[pos]['Favorited'] = ! this.data[pos]['Favorited'];
-        this.emit("sync", this.data);
-      }
+    } else if (event.event == "CREATE_RESOURCE") {
+      this.createObject(event.data)
     }
   }
 }
 
 const resourceStore = new Store('/resources/');
-dispatcher.subscribe(resourceStore.eventHandler.bind(resourceStore))
+
+dispatcher.subscribe(resourceStore.eventHandler)
+
 export default resourceStore;
 
