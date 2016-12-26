@@ -13,6 +13,7 @@ import (
 type Configuration struct {
 	Global struct {
 		Path string
+		HTTPPort string
 	}
 }
 
@@ -28,6 +29,7 @@ var globalconfig Configuration
 var defaultconfiguration string = `
 [Global]
 Path = ~/.archimedes
+HTTPPort = 8081
 `
 
 func main() {
@@ -59,5 +61,5 @@ func main() {
 	actmux.HandleFunc("/actions/", actionCreate).Methods("POST")
 	http.Handle("/actions/", actmux)
 
-	log.Fatal(http.ListenAndServe(":8082", nil))
+	log.Fatal(http.ListenAndServe(":" + globalconfig.Global.HTTPPort, nil))
 }
