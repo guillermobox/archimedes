@@ -28,7 +28,7 @@ module.exports = {
     new WebpackShellPlugin({onBuildStart:['lessc src/css/archimedes.less dist/css/archimedes.css']}),
     new CopyWebpackPlugin([
       {from: "src/index.html", to: "index.html"},
-      {from: "src/archimedes_head.ico", to: "archimeeds_head.ico"},
+      {from: "src/archimedes_head.ico", to: "archimedes_head.ico"},
       {from: "src/fonts/", to: "fonts/"},
       {from: "src/images/", to: "images/"},
       {from: "src/css/", to: "css/"},

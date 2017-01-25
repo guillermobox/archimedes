@@ -34,8 +34,11 @@ export default class Archimedes extends React.Component {
     return (
       <div>
       <Notifications />
-      <Navigation />
-        <Panels showDrag={true} first={<ResourceList />} second={<ResourceContents />} />
+      <Navigation target={this.props.params.id} />
+      <Panels
+        showDrag={true}
+        first={<ResourceList />}
+        second={this.props.children} />
       </div>
     );
   }

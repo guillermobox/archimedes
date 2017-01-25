@@ -1,10 +1,9 @@
 import dispatcher from "./Dispatcher"
+import * as Actions from '../Actions';
 
 class Store {
-  constructor (url) {
+  constructor () {
     this.listeners = {}
-    this.url = url
-    this.eventHandler = this.eventHandler.bind()
   }
   emit (event, data) {
     if (event in this.listeners) {
@@ -23,35 +22,58 @@ class Store {
       }
     }
   }
+}
+
+class RESTStore extends Store {
+  constructor (url) {
+    super()
+    this.url = url
+    this.data = []
+  }
   readCollection () {
     fetch(this.url)
-    .then(response => response.json())
-    .then(data => {
-      this.data = data;
-      this.emit("sync", this.data);
-    })
+      .then(response => response.json())
+      .then(data => {
+        this.data = data;
+        this.emit("sync", this.data);
+      })
   }
   createObject (data) {
     const options = {method: 'post', body: JSON.stringify(data)};
     fetch(this.url, options)
-    .then(response => response.json())
-    .then(data => {
-      this.data.unshift(data);
-      this.emit("sync", this.data);
-    })
+      .then(response => response.json())
+      .then(data => {
+        this.data.unshift(data);
+        this.emit("sync", this.data);
+      })
+  }
+  getState () {
+    return this.data
+  }
+}
+
+class resourceStore extends Store {
+
+}
+
+class Store {
+  constructor (url, name) {
+    this.name = name
+    this.eventHandler = this.eventHandler.bind(this)
+    this.readCollection()
   }
   eventHandler (event) {
-    if (event.event == "SHOW_RESOURCE_CONTENTS") {
-      this.emit("show", event.data)
-    } else if (event.event == "CREATE_RESOURCE") {
+    if (event.event == "CREATE" && event.name == this.name) {
       this.createObject(event.data)
     }
   }
 }
 
-const resourceStore = new Store('/resources/');
+const resourceStore = new Store('/resources/', 'RESOURCE');
+const jobStore = new Store('/actions/', 'JOB');
 
 dispatcher.subscribe(resourceStore.eventHandler)
+dispatcher.subscribe(jobStore.eventHandler)
 
-export default resourceStore;
+export resourceStore, jobStore;
 

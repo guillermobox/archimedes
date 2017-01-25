@@ -1,4 +1,5 @@
 import React from 'react';
+import { hashHistory } from 'react-router';
 
 import * as Actions from '../Actions';
 
@@ -7,18 +8,9 @@ export default class ResourceEntry extends React.Component {
     super();
     this.state = {};
     this.showResource = this.showResource.bind(this);
-    this.toggleFav = this.toggleFav.bind(this);
   }
   showResource (ev) {
-    if (ev.ctrKey) {
-      Actions.showResource(this.state);
-    } else {
-      Actions.showResource(this.state);
-    }
-  }
-  toggleFav (ev) {
-    Actions.toggleFavorite(this.state)
-    ev.stopPropagation()
+    hashHistory.push('/show/' + this.state.ID)
   }
   componentWillMount () {
     this.setState(this.props.data)
@@ -29,7 +21,7 @@ export default class ResourceEntry extends React.Component {
     const icon = icons[this.state.Kind];
     return (
       <li className="noselect resource" onClick={this.showResource}>
-        <i className={"fa " + icon} onClick={this.toggleFav}></i>
+        <i className={"fa " + icon}></i>
         <span>{title}</span>
       </li>
     );

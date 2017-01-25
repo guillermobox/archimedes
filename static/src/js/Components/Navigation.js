@@ -39,12 +39,25 @@ export default class Navigation extends React.Component {
   constructor () {
     super();
     this.state = {};
+    this.sync = this.sync.bind(this);
   }
   updateTitle (data) {
-    this.setState(data);
+    this.setState({Title: data});
   }
   componentWillMount() {
-    resourceStore.on("show", this.updateTitle.bind(this))
+    resourceStore.on("sync", this.sync)
+  }
+  componentWillUmount() {
+    resourceStore.off("sync", this.sync)
+  }
+  componentWillReceiveProps (nextProps) {
+    const data = resourceStore.getState()
+    const state = data.find(res => res.ID == nextProps.target)
+    this.updateTitle(state.Title)
+  }
+  sync (data) {
+    const state = data.find(res => res.ID == this.props.target)
+    this.setState(state);
   }
   render () {
     const boton = <button className="fa fa-plus"></button>;

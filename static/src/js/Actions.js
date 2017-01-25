@@ -2,21 +2,16 @@ import dispatcher from "./Dispatcher";
 
 export function createResource(data) {
   dispatcher.publish({
-    event: "CREATE_RESOURCE",
+    event: 'CREATE',
+    what: 'RESOURCE',
     data
   });
 }
 
-export function showResource(data) {
+export function createJob(data) {
   dispatcher.publish({
-    event: "SHOW_RESOURCE_CONTENTS",
-    data
-  });
-}
-
-export function toggleFavorite(data) {
-  dispatcher.publish({
-    event: "TOGGLE_FAVORITE",
+    event: 'CREATE',
+    what: 'JOB',
     data
   });
 }
