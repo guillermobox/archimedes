@@ -4,7 +4,7 @@ import ResourceList from "./ResourceList"
 import ResourceTree from "./ResourceTree"
 import ResourceContents from "./ResourceContents"
 import Panels from "./Panels"
-import resourceStore from "../Store"
+import { resourceStore } from "../Store"
 
 //import Alertify from "alertifyjs"
 
@@ -16,10 +16,10 @@ class Notifications extends React.Component {
     this.showCreated = this.showCreated.bind(this)
   }
   componentWillMount() {
-    resourceStore.on("created", this.showCreated)
+    resourceStore.on("create", this.showCreated)
   }
   componentWillUmount() {
-    resourceStore.off("created", this.showCreated)
+    resourceStore.off("create", this.showCreated)
   }
   showCreated (resource) {
     alertify.notify("Created new resource: " + resource.URL);

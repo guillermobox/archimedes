@@ -1,7 +1,7 @@
 import React from "react"
 import ResourceEntry from "./ResourceEntry"
 import ListControls from "./ListControls"
-import resourceStore from "../Store"
+import { resourceStore } from "../Store"
 import { humanFileSize } from "../utilities"
 
 export default class ResourceTree extends React.Component {

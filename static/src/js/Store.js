@@ -1,5 +1,5 @@
 import dispatcher from "./Dispatcher"
-import * as Actions from '../Actions';
+import * as Actions from './Actions';
 
 class Store {
   constructor () {
@@ -25,10 +25,14 @@ class Store {
 }
 
 class RESTStore extends Store {
-  constructor (url) {
+  constructor (url, name) {
     super()
+    this.name = name
     this.url = url
     this.data = []
+    this.readCollection()
+    this.eventHandler = this.eventHandler.bind(this)
+    setInterval(this.readCollection.bind(this), 3000);
   }
   readCollection () {
     fetch(this.url)
@@ -45,22 +49,11 @@ class RESTStore extends Store {
       .then(data => {
         this.data.unshift(data);
         this.emit("sync", this.data);
+        this.emit("create", data);
       })
   }
   getState () {
     return this.data
-  }
-}
-
-class resourceStore extends Store {
-
-}
-
-class Store {
-  constructor (url, name) {
-    this.name = name
-    this.eventHandler = this.eventHandler.bind(this)
-    this.readCollection()
   }
   eventHandler (event) {
     if (event.event == "CREATE" && event.name == this.name) {
@@ -69,11 +62,9 @@ class Store {
   }
 }
 
-const resourceStore = new Store('/resources/', 'RESOURCE');
-const jobStore = new Store('/actions/', 'JOB');
+export const resourceStore = new RESTStore('/resources/', 'RESOURCE');
+export const jobStore = new RESTStore('/actions/', 'JOB');
 
 dispatcher.subscribe(resourceStore.eventHandler)
 dispatcher.subscribe(jobStore.eventHandler)
-
-export resourceStore, jobStore;
 

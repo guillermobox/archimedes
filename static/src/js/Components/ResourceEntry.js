@@ -15,6 +15,9 @@ export default class ResourceEntry extends React.Component {
   componentWillMount () {
     this.setState(this.props.data)
   }
+  componentWillReceiveProps(nextProps) {
+    this.setState(nextProps)
+  }
   render () {
     const title = this.state.Title || this.state.URL;
     const icons = {video: "fa-file-video-o", web: "fa-file-text-o", pdf: "fa-file-pdf-o"};

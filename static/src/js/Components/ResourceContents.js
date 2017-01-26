@@ -1,6 +1,6 @@
 import React from "react"
 
-import resourceStore from "../Store"
+import { resourceStore } from "../Store"
 
 export default class ResourceContents extends React.Component {
   constructor() {

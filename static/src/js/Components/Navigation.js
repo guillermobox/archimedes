@@ -1,12 +1,29 @@
 import React from "react"
-import resourceStore from "../Store.js"
+import { resourceStore } from "../Store.js"
 import Portal from "react-portal";
 
 import * as Actions from '../Actions';
 
 class NewResource extends React.Component {
+  constructor () {
+    super()
+    this.resourceCreated = this.resourceCreated.bind(this);
+  }
   submitResource () {
     Actions.createResource({URL:this.refs.form.elements.url.value, Folder:this.refs.form.elements.folder.value})
+  }
+  componentWillMount() {
+    resourceStore.on("create", this.resourceCreated)
+  }
+  componentWillUmount() {
+    resourceStore.off("create", this.resourceCreated)
+  }
+
+  resourceCreated (data) {
+    console.log(data);
+    if (this.refs.form.elements.download.value) {
+      Actions.createJob({Target: data.ID, Type:"Download"})
+    }
     this.props.closePortal()
   }
 
@@ -42,6 +59,7 @@ export default class Navigation extends React.Component {
     this.sync = this.sync.bind(this);
   }
   updateTitle (data) {
+    document.title = 'Archimedes - ' + data;
     this.setState({Title: data});
   }
   componentWillMount() {
@@ -61,6 +79,7 @@ export default class Navigation extends React.Component {
   }
   render () {
     const boton = <button className="fa fa-plus"></button>;
+    document.title = 'Archimedes - ' + this.state.Title;
     return (
       <nav>
       <img src="images/archimedes_head.png"></img>
